@@ -1,152 +1,84 @@
-<?php
-// read cookie contents
-$cookie = isset($_COOKIE['cart_items_cookie']) ? $_COOKIE['cart_items_cookie'] : "";
-$cookie = stripslashes($cookie);
-$saved_cart_items = json_decode($cookie, true);
- 
-// connect to database
-include 'config/database.php';
- 
-// include objects
-include_once "objects/product.php";
-// read all product based on product ids included in the $ids variable
-// reference http://stackoverflow.com/a/10722827/827418
-public function readByIds($ids){
- 
-    $ids_arr = str_repeat('?,', count($ids) - 1) . '?';
- 
-    // query to select products
-    $query = "SELECT id, name, price FROM " . $this->table_name . " WHERE id IN ({$ids_arr}) ORDER BY name";
- 
-    // prepare query statement
-    $stmt = $this->conn->prepare($query);
- 
-    // execute query
-    $stmt->execute($ids);
- 
-    // return values from database
-    return $stmt;
-}
-include_once "objects/product_image.php";
- 
-// get database connection
-$database = new Database();
-$db = $database->getConnection();
- 
-// initialize objects
-$product = new Product($db);
-$product_image = new ProductImage($db);
- 
-// set page title
-$page_title="Cart";
- 
-// include page header html
-include 'layout_head.php';
-$action = isset($_GET['action']) ? $_GET['action'] : "";
- 
-echo "<div class='col-md-12'>";
-    if($action=='removed'){
-        echo "<div class='alert alert-info'>";
-            echo "Product was removed from your cart!";
-        echo "</div>";
-    }
- 
-    else if($action=='quantity_updated'){
-        echo "<div class='alert alert-info'>";
-            echo "Product quantity was updated!";
-        echo "</div>";
-    }
- 
-    else if($action=='empty_cart'){
-        echo "<div class='alert alert-danger'>";
-            echo "Cart was emptied!";
-        echo "</div>";
-    }
- 
-    else if($action=='exists'){
-        echo "<div class='alert alert-info'>";
-            echo "Product already exists in your cart!";
-        echo "</div>";
-    }
-echo "</div>";
-if(count($saved_cart_items)>0){
- 
-    echo "<div class='col-md-12'>";
-        // remove all cart contents
-        echo "<div class='right-button-margin' style='overflow:hidden;'>";
-            echo "<button class='btn btn-default pull-right' id='empty-cart'>Empty Cart</button>";
-        echo "</div>";
-    echo "</div>";
- 
-    // get the product ids
-    $ids = array();
-    foreach($saved_cart_items as $id=>$name){
-        array_push($ids, $id);
-    }
- 
-    $stmt=$product->readByIds($ids);
- 
-    $total=0;
-    $item_count=0;
- 
-    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)){
-        extract($row);
- 
-        $quantity=$saved_cart_items[$id]['quantity'];
-        $sub_total=$price*$quantity;
- 
-        // =================
-        echo "<div class='cart-row'>";
-            echo "<div class='col-md-8'>";
- 
-                echo "<div class='product-name m-b-10px'>";
-                    echo "<h4>{$name}</h4>";
-                echo "</div>";
- 
-                // update quantity
-                echo "<form class='update-quantity-form w-200-px'>";
-                    echo "<div class='product-id' style='display:none;'>{$id}</div>";
-                    echo "<input type='number' value='{$quantity}' name='quantity' class='form-control cart-quantity m-b-10px cart-quantity-dropdown' min='1' />";
-                    echo "<button class='btn btn-default update-quantity' type='submit'>Update</button>";
-                echo "</form>";
- 
-                // delete from cart
-                echo "<a href='remove_from_cart.php?id={$id}' class='btn btn-default'>";
-                    echo "Delete";
-                echo "</a>";
-            echo "</div>";
- 
-            echo "<div class='col-md-4'>";
-                echo "<h4>&#36;" . number_format($price, 2, '.', ',') . "</h4>";
-            echo "</div>";
-        echo "</div>";
-        // =================
- 
-        $item_count += $quantity;
-        $total+=$sub_total;
-    }
- 
-    echo "<div class='col-md-8'></div>";
-    echo "<div class='col-md-4'>";
-        echo "<div class='cart-row'>";
-            echo "<h4 class='m-b-10px'>Total ({$item_count} items)</h4>";
-            echo "<h4>&#36;" . number_format($total, 2, '.', ',') . "</h4>";
-            echo "<a href='checkout.php' class='btn btn-success m-b-10px'>";
-                echo "<span class='glyphicon glyphicon-shopping-cart'></span> Proceed to Checkout";
-            echo "</a>";
-        echo "</div>";
-    echo "</div>";
- 
-}
- 
-else{
-    echo "<div class='col-md-12'>";
-        echo "<div class='alert alert-danger'>";
-            echo "No products found in your cart!";
-        echo "</div>";
-    echo "</div>";
-}
- 
-// layout footer 
-include 'layout_foot.php';
-?>
+
+<?php require 'header.php';
+   require 'db.php'; 
+   if( isset($_GET['foodID'])){
+    $id = $_GET['foodID'];
+    $sql = "SELECT * FROM orderitem";
+    $statement = $connection -> prepare($sql);
+    $statement->execute();
+    $re = $statement->fetchAll(PDO::FETCH_OBJ);} ?>
+<head>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+</head>
+
+<script src="https://use.fontawesome.com/c560c025cf.js"></script>
+<?php foreach ($re as $r): ?>
+   <div class="card shopping-cart">
+            <div class="card-header bg-dark text-light">
+                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                Shipping cart
+                <a href="index.php" class="btn btn-outline-info btn-sm pull-right">Continue shopping</a>
+                <div class="clearfix"></div>
+            </div>
+            <div class="card-body">
+                    <!-- PRODUCT -->
+                    <div class="row">
+                        <div class="col-12 text-sm-center col-sm-12 text-md-left col-md-6">
+                            <h4 class="product-name"><strong><?= $r->Name ?></strong></h4>
+                            <h4>
+                                <small> Price: <?= $r->UnitPrice ?></small>
+                            </h4>
+                        </div>
+                        <div class="col-12 col-sm-12 text-sm-center col-md-4 text-md-right row">
+                            <div class="col-3 col-sm-3 col-md-6 text-md-right" style="padding-top: 5px">
+                                <h6><strong><?= $r->UnitPrice ?><span class="text-muted">x</span></strong></h6>
+                            </div>
+                            <div class="col-4 col-sm-4 col-md-4">
+                                <div class="quantity">
+                                    <input type="button" value="+" class="plus">
+                                    <input type="number" step="1" max="99" min="1" value="1" title="Qty" class="qty"
+                                           size="4">
+                                    <input type="button" value="-" class="minus">
+                                </div>
+                            </div>
+                            <div class="col-2 col-sm-2 col-md-2 text-right">
+                                <button type="button" class="btn btn-outline-danger btn-xs">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <!-- END PRODUCT -->
+                    <!-- PRODUCT -->
+                    <hr>
+                    <!-- END PRODUCT -->
+                <div class="pull-right">
+                    <a href="" class="btn btn-outline-secondary pull-right">
+                        Update shopping cart
+                    </a>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="coupon col-md-5 col-sm-5 no-padding-left pull-left">
+                    <div class="row">
+                        <div class="col-6">
+                            <input type="text" class="form-control" placeholder="cupone code">
+                        </div>
+                        <div class="col-6">
+                            <input type="submit" class="btn btn-default" value="Use cupone">
+                        </div>
+                    </div>
+                </div>
+                <div class="pull-right" style="margin: 10px">
+                    <a href="" class="btn btn-success pull-right">Checkout</a>
+                    <div class="pull-right" style="margin: 5px">
+                        Total price: <b>50.00€</b>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+  
+</div>

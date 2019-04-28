@@ -1,7 +1,7 @@
 <?php
  
 // get the product id
-$id = isset($_GET['id']) ? $_GET['id'] : "";
+$id = isset($_GET['foodID']) ? $_GET['foodID'] : "";
 $quantity = isset($_GET['quantity']) ? $_GET['quantity'] : 1;
 $page = isset($_GET['page']) ? $_GET['page'] : 1;
  

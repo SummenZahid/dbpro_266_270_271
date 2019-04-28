@@ -1,4 +1,4 @@
-<?php $sql = "SELECT * FROM recipe ORDER BY id DESC LIMIT 0,3";
+<?php $sql = "SELECT * FROM fooditem ORDER BY foodID DESC LIMIT 0,3";
    $statement = $connection -> prepare($sql);
    $statement->execute();
    $re = $statement->fetchAll(PDO::FETCH_OBJ);    ?>
@@ -43,11 +43,14 @@
    <!-- Author Box -->
    <div class="widget">
       <div class="author-box">
-         <span class="title">About me</span>
-         <span class="name">Summen <br> Zahid</span>
-         <span class="contact"><a href="#"><span class="__cf_email__" data-cfemail="2457454a40564564474c4b530a474b49">summenzahid@gmail.com</span></a></span>
-         <img src="images/author.jpg" alt="">
-         <p>I'm Summen and this is where I share my stuff. I am madly in love with food. You will find a balance of healthy recipes, comfort food and indulgent desserts.</p>
+         <span class="title">About Us:</span>
+         <span class="name">Summen Zahid</span>
+                  <span class="contact"><span class="__cf_email__" data-cfemail="2457454a40564564474c4b530a474b49">summenzahid@gmail.com</span></span><br>
+         <span class="name">Alia Liaqat</span>
+                  <span class="contact"><span class="__cf_email__" data-cfemail="2457454a40564564474c4b530a474b49">alialiaqat250@gmail.com</span></span><br>
+         <span class="name">Hafsa Qayyum</span>
+         <span class="contact"><span class="__cf_email__" data-cfemail="2457454a40564564474c4b530a474b49">komalHafsa786@gmail.com</span></span><br>
+         <p>we are making this for you this is where we share our stuff. we are madly in love with food. You will find a balance of healthy food items, comfort food and indulgent desserts.</p>
       </div>
    </div>
    <!-- Popular Recipes -->
@@ -57,10 +60,10 @@
       <div class="clearfix"></div>
       <?php foreach ($re as $r): ?> 		
       <!-- Recipe #1 -->
-      <a href="recipe.php?id=<?= $r->id?>" class="featured-recipe">
-         <img style="height: 100px;" src="<?= $r-> picsouce ?>" alt="">
+      <a href="recipe.php?foodID=<?= $r->foodID?>" class="featured-recipe">
+         <img style="height: 100px;" src="<?= $r-> picsource ?>" alt="">
          <div class="featured-recipe-content">
-            <h4><?= $r->title ?></h4>
+            <h4><?= $r->Name ?></h4>
             <div class="rating five-stars">
                <div class="star-rating"></div>
                <div class="star-bg"></div>

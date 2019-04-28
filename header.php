@@ -11,7 +11,6 @@
 <!-- Basic Page Needs
 ================================================== -->
 
-
 <!-- Mobile Specific Metas
 ================================================== -->
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -143,14 +142,14 @@
 		<ul>
 			<li><a href="index.php" id="current">Home</a></li>
 			<?php if (isset($_SESSION['login'] ) && $_SESSION['user_RoleID'] == 1 ): ?> 
-				<li><a href="submit.php">Submit Recipe</a></li>
+				<li><a href="submit.php">Submit Food</a></li>
                 <li><a href="user.php">My Account</a></li>
         <li><a href="logout.php">Logout</a></li>
         <?php elseif (isset($_SESSION['login']) && $_SESSION['user_RoleID'] != 1 ): ?>
-				<li><a href="user.php">My Account</a></li>
+				<li><a href="cart.php">My Account</a></li>
 				<li><a href="logout.php">Logout</a></li>
 			<?php else: ?>
-				<li onclick="return confirm('Please Login to submit recipe!');"><a href="#">Submit Recipe</a></li>
+				<li onclick="return confirm('Please Login to submit Food Item!');"><a href="#">Submit Food</a></li>
 				<li><a href="login.php">Login</a></li>
 				<li><a href="register.php" >Register</a></li>
 			<?php endif; ?>

@@ -44,8 +44,8 @@
             <h2 class="rsSlideTitle title"><a href="recipe.php?foodID=<?= $rep->foodID?>"><?= $rep->Name ?></a></h2>
             <div class="rsSlideTitle details">
                <ul>
-                  <li><i class="fa fa-cutlery"></i> <?= $rep->Quantity ?></li>
-                  <li><i class="fa fa-money"></i><?= $rep->UnitPrice ?></li>
+                  <li><i class="fa fa-cutlery"></i>Yield <?= $rep->Quantity ?> persons</li>
+                  <li><i class="fa fa-money"></i>Price <?= $rep->UnitPrice ?></li>
       
                </ul>
             </div>
