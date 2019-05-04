@@ -98,8 +98,9 @@
             <?php if (isset($_SESSION['login']) && isset($_SESSION['user_ID']) && ($re[0]->userID == $_SESSION['user_ID'])): ?>
             <a style="margin-left: 5px;" class="print" href="edit.php?foodID=<?= $re[0]->foodID?>">Edit recipe</a>
             <?php endif; ?>
-            <a href="#" class="print"><i class="fa fa-print"></i> Print</a>
-            <button type="submit" name="cart" id="cart"><a onclick="return confirm('Added to the cart');" method= "POST" name="cart" id="cart" style="margin: 0.1%" href="recipe.php?foodID=<?= $re[0]->foodID?>" class="print" ><i class="fa fa-print"  ></i> Add to Cart</a></button>
+            <?php if (isset($_SESSION['login']) && isset($_SESSION['user_ID']) && ($re[0]->roleID = 2 )): ?>
+            <button type="submit" name="cart" id="cart"><a onclick="return confirm('Added to the cart');" method= "POST" name="cart" id="cart" style="margin: 0.1%" href="shop.php?foodID=<?= $re[0]->foodID?>" class="print" ><i class="fa fa-print"  ></i> Add to Cart</a></button>
+            <?php endif; ?>
             <div class="clearfix"></div>
          </section>
        </form>

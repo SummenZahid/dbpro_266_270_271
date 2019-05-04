@@ -26,7 +26,7 @@
           ob_enf_fluch();
        }
        else{
-          $sql = 'INSERT INTO user(Email, PhoneNo , Fname , Lname, Password, RoleID) VALUES(:email,:contact,:Lusername, :username, :password, :role)';
+          $sql = 'INSERT INTO user(Email, PhoneNo , Fname , Lname, Password, RoleID) VALUES(:email,:contact,:username, :Lusername, :password, :role)';
           $statement = $connection->prepare($sql);
           if ($statement -> execute([':email'=> $email ,':contact'=> $contact ,':username'=> $username ,':Lusername'=> $Lusername ,':password'=> $password , ':role' => $roleID])); 
           {

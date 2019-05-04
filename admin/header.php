@@ -132,6 +132,15 @@
       <li><a href="user.php" id="current">Users</a></li>
       <li><a href="chef.php" id="current">Chef</a></li>
 			<li><a href="dashboard.php">Dashboard</a></li>
+      <li><a href="#">Reports</a>
+        <ul>
+          <li><a href="userpdf.php">All Users</a></li>
+          <li><a href="commonuserpdf.php">Users</a></li>
+          <li><a href="chefpdf.php">Chef</a></li>
+          <li><a href="foodpdf.php">All Food Items</a></li>
+          <li><a href="reviewspdf.php">Reviews</a></li>
+        </ul>
+      </li>
 		</ul>
 	</nav>
 

@@ -55,7 +55,7 @@
    </div>
    <!-- Popular Recipes -->
    <div class="widget">
-      <h4 class="headline">Latest Recipes</h4>
+      <h4 class="headline">Latest Food Items</h4>
       <span class="line margin-bottom-30"></span>
       <div class="clearfix"></div>
       <?php foreach ($re as $r): ?> 		

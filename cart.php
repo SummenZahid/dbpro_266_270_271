@@ -3,7 +3,7 @@
    require 'db.php'; 
    if( isset($_GET['foodID'])){
     $id = $_GET['foodID'];
-    $sql = "SELECT * FROM orderitem";
+    $sql = "SELECT * FROM fooditem where foodID = '$id'";
     $statement = $connection -> prepare($sql);
     $statement->execute();
     $re = $statement->fetchAll(PDO::FETCH_OBJ);} ?>
@@ -26,14 +26,14 @@
                     <!-- PRODUCT -->
                     <div class="row">
                         <div class="col-12 text-sm-center col-sm-12 text-md-left col-md-6">
-                            <h4 class="product-name"><strong><?= $r->Name ?></strong></h4>
+                            <h4 class="product-name"><strong><?= $re[0]->Name ?></strong></h4>
                             <h4>
-                                <small> Price: <?= $r->UnitPrice ?></small>
+                                <small> Price: <?= $re[0]->UnitPrice ?></small>
                             </h4>
                         </div>
                         <div class="col-12 col-sm-12 text-sm-center col-md-4 text-md-right row">
                             <div class="col-3 col-sm-3 col-md-6 text-md-right" style="padding-top: 5px">
-                                <h6><strong><?= $r->UnitPrice ?><span class="text-muted">x</span></strong></h6>
+                                <h6><strong><?= $re[0]->UnitPrice ?><span class="text-muted">x</span></strong></h6>
                             </div>
                             <div class="col-4 col-sm-4 col-md-4">
                                 <div class="quantity">
