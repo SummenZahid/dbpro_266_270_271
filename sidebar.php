@@ -20,19 +20,33 @@
          
          <div class="widget_shopping_cart_content">
             <ul class="product_list_widget">
-               
-               <li>
-                  <a href="#" class="image"><img src="images/shop_item_02a.jpg" alt=""></a>
-                  <div class="product_title">
-                     <a href="#">Mixed Herbs</a>
-                     <span class="quantity">1 × <span class="amount">$2.99</span></span>  
-                  </div>
-               </li>
+               <?php $total = 0;?>
+               <?php if(empty($_SESSION['shopping_cart'])):?>
+                  <li>
+                     <p><strong>No Items In The Cart</strong></p>
+                  </li>
+               <?php else: ?>
+               <?php 
+                  foreach ($_SESSION['shopping_cart'] as $key => $value) 
+                  { 
+               ?>
+                     <li>
+                        <a href="#" class="image"><img src="<?php echo $value['item_image']; ?>" alt=""></a>
+                        <div class="product_title">
+                           <a href="#"><?php echo $value['item_name']; ?></a>
+                           <span class="quantity"><?php echo $value['item_quantity']; ?> × <span class="amount">$<?php echo $value['item_price']; ?> </span></span>  
+                        </div>
+                     </li>
 
+                  <?php
+                  $total = $total + $value['item_quantity'] * $value['item_price'];
+                  }
+               ?>
+               <?php endif;?>
             </ul>
 
             <p class="total"><strong>Subtotal:</strong>
-            <span class="amount">$2.99</span></p>
+            <span class="amount">$<?php echo number_format($total, 2);?></span></p>
 
             <span class="buttons">
                <a href="#" class="button">View Cart</a>
@@ -61,7 +75,7 @@
       <?php foreach ($re as $r): ?> 		
       <!-- Recipe #1 -->
       <a href="recipe.php?foodID=<?= $r->foodID?>" class="featured-recipe">
-         <img style="height: 100px;" src="<?= $r-> picsource ?>" alt="">
+         <img style="height: 100px; width: 100%;" src="<?= $r-> picsource ?>" alt="">
          <div class="featured-recipe-content">
             <h4><?= $r->Name ?></h4>
             <div class="rating five-stars">
@@ -73,34 +87,8 @@
       </a>
       <?php endforeach; ?>
       <!-- Popular Recipes -->
-      <div class="widget">
-         <h4 class="headline">Share</h4>
-         <span class="line margin-bottom-30"></span>
-         <div class="clearfix"></div>
-         <ul class="share-buttons">
-            <li class="facebook-share">
-               <a href="#">
-               <span class="counter">1,234</span>
-               <span class="counted">Fans</span>
-               <span class="action-button">Like</span>
-               </a>
-            </li>
-            <li class="twitter-share">
-               <a href="#">
-               <span class="counter">863</span>
-               <span class="counted">Followers</span>
-               <span class="action-button">Follow</span>
-               </a>
-            </li>
-            <li class="google-plus-share">
-               <a href="#">
-               <span class="counter">902</span>
-               <span class="counted">Followers</span>
-               <span class="action-button">Follow</span>
-               </a>
-            </li>
-         </ul>
-         <div class="clearfix"></div>
+      <div style="height: 300px;">
+         
       </div>
    </div>
 </div>

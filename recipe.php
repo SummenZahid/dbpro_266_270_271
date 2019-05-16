@@ -17,20 +17,54 @@
       $statementi->execute();
       $repe = $statementi->fetchAll(PDO::FETCH_OBJ);
    }
-   if( isset($_POST['cart'])){
+   if(isset($_GET['checkout'])){
+    if(isset($_SESSION['user_ID'])){
       $userID = $_SESSION['user_ID'];
-      if( isset($_GET['foodID'])){
-      $foodID = $_GET['foodID'];
-      $quantity = $_POST['quantity'];
-      $datet = date("H:i:s");
-      $sqld = "INSERT INTO order(OrderDate,Quantity,PickupDate, UserID, foodID) VALUES($datet, $quantity,$datet, $userID, $foodID) ";
-      $statementd = $connection -> prepare($sqld);
-      if ($statementd -> execute([':OrderDate'=> $datet ,':quantity' => $quantity, ':OrderDate'=> $datet ,':userID' => $userID , ':userID' => $userID])); 
-      {
-         $message = 'data inserted successfully';
+      if(!empty($_SESSION['shopping_cart'])){
+        $sql = "INSERT INTO `order`(`Quantity`, `UserID`, `foodID`) VALUES ('2', '$userID', '2')";
+        mysqli_query($conn, $sql);
+        $order_id =  mysqli_insert_id($conn);
+        $sql2 = "";
+        foreach ($_SESSION['shopping_cart'] as $key => $value){
+          $item_id =$value['item_id'];
+          $item_quantity = $value['item_quantity'];
+          $item_price = $value['item_price'];
+          $sql2.= "INSERT INTO `orderitem`(`OrderID`, `FoodID`, `Quantity`, `UnitPrice`) VALUES ('$order_id', '$item_id', '$item_quantity', '$item_price');";
+        }
+        $conn->multi_query($sql2);
+
+        unset($_SESSION['shopping_cart']);
       }
+    }
       }
+
+   if(isset($_POST['add_to_cart'])){
+    if(isset($_SESSION['shopping_cart'])){
+      $item_array_id = array_column($_SESSION['shopping_cart'], "item_id");
+      if(!in_array($_POST['item_id'], $item_array_id)){
+        $count = count($_SESSION['shopping_cart']);
+        $item_array = array(
+        'item_id' => $_POST['item_id'],
+        'item_name' => $_POST['item_name'],
+        'item_price' => $_POST['item_price'],
+        'item_quantity' => $_POST['item_quantity'],
+        'item_image' => $_POST['item_image']
+      );
+      $_SESSION['shopping_cart'][$count] = $item_array;
+      }else{
+
+      }
+    }else{
+      $item_array = array(
+        'item_id' => $_POST['item_id'],
+        'item_name' => $_POST['item_name'],
+        'item_price' => $_POST['item_price'],
+        'item_quantity' => $_POST['item_quantity'],
+        'item_image' => $_POST['item_image']
+      );
+      $_SESSION['shopping_cart'][0] = $item_array;
    }
+ }
    $message = '';
       if (isset($_POST['submit']))
 {
@@ -92,36 +126,32 @@
          <section class="recipe-details" itemprop="nutrition">
             <ul>
                <li>Quantity: <strong itemprop="Quantity"><?= $re[0]->Quantity ?></strong></li>
-               <li>Price:<strong itemprop="Price"><?= $re[0]->UnitPrice ?></strong></li>
-               <li><input style="height: 30px;width: 30px;" type="number" name="quantity" value="1"></li>
+               <li>Price:<strong itemprop="Price">$<?= $re[0]->UnitPrice ?></strong></li>
+               <li><?php if (isset($_SESSION['login']) && isset($_SESSION['user_ID']) && ($re[0]->userID == $_SESSION['user_ID'])): ?>
+            <a style="margin-left: 5px; background: #a0a0a0;border: 0px; padding: 8px 20px 8px 20px; color: white; font-weight: 700; cursor: pointer;" class="print" href="edit.php?foodID=<?= $re[0]->foodID?>">Edit recipe</a>
+            <?php endif; ?></li>
+               <form action="" method="POST" id="myForm">
+                <input type="hidden" name="item_price" value="<?= $re[0]->UnitPrice ?>">
+                <input type="hidden" name="item_name" value="<?= $re[0]->Name ?>">
+                <input type="hidden" name="item_image" value="<?= $re[0]->picsource ?>">
+                <input type="hidden" name="item_id" value="<?= $re[0]->foodID ?>">
+               <li><input style="height: 14px; width: 60px; padding: 10px; border-radius: 3px; border: 1px;" type="number" name="item_quantity" value="1"></li>
+               <section class="linking"style="padding-top: 0px;">
+                <input type="hidden" name="add_to_cart" value="true">
+          <button class="button adc color" style="background-color: #8dc63f; border: 0px; padding: 8px 20px 8px 20px; color: white; font-weight: 700; cursor: pointer;" type="submit"><i class="fa fa-print"  ></i>  Add to Cart</button>
+          </form>
+
+          <div class="clearfix"></div>
+
+      </section>
+      
             </ul>
-            <?php if (isset($_SESSION['login']) && isset($_SESSION['user_ID']) && ($re[0]->userID == $_SESSION['user_ID'])): ?>
-            <a style="margin-left: 5px;" class="print" href="edit.php?foodID=<?= $re[0]->foodID?>">Edit recipe</a>
-            <?php endif; ?>
-            <?php if (isset($_SESSION['login']) && isset($_SESSION['user_ID']) && ($re[0]->roleID = 2 )): ?>
-            <button type="submit" name="cart" id="cart"><a onclick="return confirm('Added to the cart');" method= "POST" name="cart" id="cart" style="margin: 0.1%" href="shop.php?foodID=<?= $re[0]->foodID?>" class="print" ><i class="fa fa-print"  ></i> Add to Cart</a></button>
-            <?php endif; ?>
+            
             <div class="clearfix"></div>
          </section>
        </form>
          <div class="recipe-container">
-            <div class="directions-container">
-               <!-- Directions -->
-               <h3>Directions</h3>
-               <ol style="text-align: justify;text-justify: inter-word;" class="directions" itemprop="recipeInstructions">
-                  <li ><?= $re[0]->Quantity ?></li>
-               </ol>
-            </div>
          </div>
-         <div class="clearfix"></div>
-         <!-- Share Post -->
-         <ul class="share-post">
-            <li><a href="#" class="facebook-share">Facebook</a></li>
-            <li><a href="#" class="twitter-share">Twitter</a></li>
-            <li><a href="#" class="google-plus-share">Google Plus</a></li>
-            <li><a href="#" class="pinterest-share">Pinterest</a></li>
-            <!-- <li><a href="#add-review" class="rate-recipe">Add Review</a></li> -->
-         </ul>
          <div class="clearfix"></div>
          <!-- Meta -->
          <!--  		<div class="post-meta">

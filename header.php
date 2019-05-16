@@ -146,7 +146,6 @@
                 <li><a href="user.php">My Account</a></li>
         <li><a href="logout.php">Logout</a></li>
         <?php elseif (isset($_SESSION['login']) && $_SESSION['user_RoleID'] != 1 ): ?>
-				<li><a href="cart.php">My Account</a></li>
 				<li><a href="logout.php">Logout</a></li>
 			<?php else: ?>
 				<li onclick="return confirm('Please Login to submit Food Item!');"><a href="#">Submit Food</a></li>

@@ -49,7 +49,7 @@
       
                </ul>
             </div>
-            <a href="recipe.php?foodID=<?= $rep->foodID?>" class="rsSlideTitle button">View Recipe</a>
+            <a href="recipe.php?foodID=<?= $rep->foodID?>" class="rsSlideTitle button">View Food Item</a>
          </div>
       </div>
    </div>

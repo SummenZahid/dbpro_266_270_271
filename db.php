@@ -5,6 +5,7 @@ $username = 'root';
 $password = '';
 $options = [];
 
+$conn=mysqli_connect("localhost","root","","db23");
 
 try{
 	 $connection = new PDO($dsn , $username, $password, $options);

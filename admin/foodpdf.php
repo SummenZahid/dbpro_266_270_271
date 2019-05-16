@@ -1,7 +1,6 @@
 <?php 
 require "fpdf.php";
 $db = new PDO('mysql:host=localhost;dbname=db23','root','');
-
 class myPDF extends FPDF{
     function header(){
         $this->image('logo.png',10,6);
@@ -19,9 +18,9 @@ class myPDF extends FPDF{
     }
     function headerTable(){
         $this->SetFont('Times','B',12);
-        $this->Cell(20,10,'ID',1,0,'C');
-        $this->Cell(40,10,'Name',1,0,'C');
-        $this->Cell(40,10,'ChefID',1,0,'C');
+        $this->Cell(60,10,'ID',1,0,'C');
+        $this->Cell(60,10,'Name',1,0,'C');
+        $this->Cell(60,10,'ChefID',1,0,'C');
         $this->Cell(40,10,'Price',1,0,'C');
         $this->Cell(60,10,'Yield',1,0,'C');
         $this->Ln();
@@ -30,9 +29,9 @@ class myPDF extends FPDF{
         $this->SetFont('Times','',12);
         $stmt = $db->query('SELECT * FROM fooditem');
         while($data = $stmt->fetch(PDO::FETCH_OBJ)){
-            $this->Cell(20,10,$data->foodID,1,0,'C');
-            $this->Cell(40,10,$data->Name,1,0,'L');
-            $this->Cell(40,10,$data->userID,1,0,'L');
+            $this->Cell(60,10,$data->foodID,1,0,'C');
+            $this->Cell(60,10,$data->Name,1,0,'L');
+            $this->Cell(60,10,$data->userID,1,0,'L');
             $this->Cell(40,10,$data->UnitPrice,1,0,'L');
             $this->Cell(60,10,$data->Quantity,1,0,'L');
             $this->Ln();
